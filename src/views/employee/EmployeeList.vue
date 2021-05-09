@@ -142,17 +142,18 @@
         </div>
         <div data-v-a72348a4="" class="paging-record-option">
           <select class="select-banGhi">
-            <option value="">10 bản ghi trên một trang</option>
-            <option value="469b3ece-744a-45d5-957d-e8c757976496">
+            <option value=""
+            >10 bản ghi trên một trang</option>
+            <option value="1">
               20 bản ghi trên một trang
             </option>
-            <option value="4e272fc4-7875-78d6-7d32-6a1673ffca7c">
+            <option value="2">
               30 bản ghi trên một trang
             </option>
-            <option value="17120d02-6ab5-3e43-18cb-66948daf6128">
+            <option value="3">
               50 bản ghi trên một trang
             </option>
-            <option value="142cb08f-7c31-21fa-8e90-67245e8b283e">
+            <option value="4">
               100 bản ghi trên một trang
             </option>
           </select>
@@ -210,20 +211,6 @@ export default {
     changeColor: { type: Boolean, default: false },
   },
 
-  // computed: {
-  //   searchByCode:function(){
-  //     axios
-  //       .get("https://localhost:44369/api/Employee/search?name=Nguyễn Giản Dương")
-  //       .then((res) => {
-  //         console.log(res);
-  //         this.employees = res.data;
-  //       })
-  //       .catch((res) => {
-  //         console.log(res);
-  //       });
-  //   },
-  // },
-
   methods: {
     loadData() {
       axios
@@ -237,7 +224,17 @@ export default {
         });
     },
 
-    
+    paging(PageIndex, PageSize) {
+      axios
+        .get("https://localhost:44369/api/Employee/Paging?pageIndex="+ this.PageIndex + "&pageSize=" + this.PageSize)
+        .then((res) => {
+          console.log(res);
+          this.employees = res.data;
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    },
     /**--------------------------------------
      * Hiển thị Dialog của cha
      * CreatedBy: NVMANH (31/03/2021)
@@ -400,6 +397,8 @@ export default {
       salary: "",
       idNewEmp: "",
       search: "",
+      PageIndex: 10,
+      PageSize: 10,
     };
   },
 

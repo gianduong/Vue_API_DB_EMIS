@@ -13,11 +13,205 @@
           <div class="dialog-close-button" @click="btnCloseOnClick()">
             &#x2715;
           </div>
-          <input type="checkbox" name="" id="" /><p>Là khách hàng</p>
-          <input type="checkbox" name="" id="" /> <p>Là nhà cung cấp</p>
+          <input type="checkbox" name="" id="" />
+          <p>Là khách hàng</p>
+          <input type="checkbox" name="" id="" />
+          <p>Là nhà cung cấp</p>
         </div>
         <div class="dialog-body">
-          <div class="img">
+          <div class="base">
+            <div class="base-left">
+              <div class="row1">
+                <div class="m-col">
+                  <label>Mã nhân viên (<a style="color: red">*</a>)</label>
+                  <input
+                    id="txtEmployeeCode"
+                    type="text"
+                    ref="empId"
+                    style="width: 132px"
+                    v-model="employee.EmployeeCode"
+                    :class="{ warning: colorId }"
+                  />
+                </div>
+                <div class="m-col">
+                  <label style="margin-left: 10px"
+                    >Họ và tên (<a style="color: red">*</a>)</label
+                  >
+                  <input
+                    id="txtFullName"
+                    type="text"
+                    style="margin-bottom: 40px"
+                    v-model="employee.fullName"
+                    :class="{ warning: colorName }"
+                  />
+                </div>
+              </div>
+              <div class="row2">
+                <label style="margin-left: 10px"
+                  >Đơn vị (<a style="color: red">*</a>)</label
+                >
+                <select
+                  id="cbDepartment"
+                  style="margin-left: 10px; margin-bottom: 13px"
+                  v-model="employee.departmentId"
+                >
+                  <option value="35e773ea-5d44-2dda-26a8-6d513e380bde">
+                    Phòng nghiên cứu
+                  </option>
+                  <option value="3f8e6896-4c7d-15f5-a018-75d8bd200d7c">
+                    Phòng Công nghệ
+                  </option>
+                  <option value="78aafe4a-67a7-2076-3bf3-eb0223d0a4f7">
+                    Phòng đào tạo
+                  </option>
+                  <option value="45ac3d26-18f2-18a9-3031-644313fbb055">
+                    Phòng kinh doanh
+                  </option>
+                  <option value="7c4f14d8-66fb-14ae-198f-6354f958f4c0">
+                    Phòng kế toán
+                  </option>
+                </select>
+
+                <label style="margin-left: 10px">Chức danh</label>
+                <input
+                  id="txtEmployeeCode"
+                  type="text"
+                  ref="empId"
+                  style="margin-left: 10px; margin-bottom: 20px"
+                  v-model="employee.employeeCode"
+                  :class="{ warning: colorId }"
+                />
+              </div>
+            </div>
+            <div class="base-right">
+              <div class="right1">
+                <div class="m-col">
+                  <label>Ngày sinh</label>
+                  <input
+                    style="width: 172px"
+                    id="dtDateOfBirth"
+                    type="date"
+                    v-model="employee.dateOfBirth"
+                  />
+                </div>
+                <div class="m-col">
+                  <label>Giới tính</label>
+                  <select id="cbGender" v-model="employee.gender">
+                    <option value="1">Nam</option>
+                    <option value="0">Nữ</option>
+                    <option value="2">Không xác định</option>
+                  </select>
+                </div>
+              </div>
+              <div class="right2">
+                <div class="m-col">
+                  <label
+                    >Số CMTND</label
+                  >
+                  <input
+                    style="width: 172px"
+                    id="txtCMT"
+                    type="text"
+                    v-model="employee.identifyNumber"
+                  />
+                </div>
+                <div class="m-col">
+                  <label>Ngày cấp</label>
+                  <input
+                    style="width: 190px"
+                    id="dtDatecreate"
+                    type="date"
+                    v-model="employee.identifyDate"
+                  />
+                </div>
+              </div>
+              <div class="right3">
+                <div class="m-col">
+                  <label>Nơi cấp</label>
+                  <input
+                    style="width: 382px"
+                    id="txtPlace"
+                    type="text"
+                    v-model="employee.identifyRegion"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="deep">
+            <div class="deep-on">
+              <div class="m-col">
+                <label>Địa chỉ</label>
+                <input
+                  id="txtaddress"
+                  type="text"
+                  ref="address"
+                  v-model="employee.address"
+                />
+              </div>
+            </div>
+            <div class="deep-down">
+              <div class="deep-phone">
+                <div class="m-col">
+                  <label>Điện thoại di động</label>
+                  <input
+                    style="width:180px"
+                    id="txtPhone"
+                    type="text"
+                    v-model="employee.phoneNumber"
+                  />
+                </div>
+                <div class="m-col">
+                  <label>Điện thoại cố định</label>
+                  <input
+                    style="width:180px"
+                    id="txtPhone"
+                    type="text"
+                    v-model="employee.homePhone"
+                  />
+                </div>
+                <div class="m-col">
+                  <label>Email (<a style="color: red">*</a>)</label>
+                  <input
+                    style="width:180px"
+                    id="txtEmail"
+                    type="email"
+                    v-model="employee.email"
+                  />
+                </div>
+              </div>
+              <div class="deep-bank">
+                <div class="m-col">
+                  <label>Tên ngân hàng</label>
+                  <input
+                    style="width:180px"
+                    id="txtPhone"
+                    type="text"
+                    v-model="employee.bankName"
+                  />
+                </div>
+                <div class="m-col">
+                  <label>Tài khoản ngân hàng</label>
+                  <input
+                    style="width:180px"
+                    id="txtPhone"
+                    type="text"
+                    v-model="employee.bankAccount"
+                  />
+                </div>
+                <div class="m-col">
+                  <label>Chi nhánh</label>
+                  <input
+                    style="width:180px"
+                    id="txtEmail"
+                    type="email"
+                    v-model="employee.agency"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="img">
             <br />
             <br />
             <img src="../../assets/img/default-avatar.jpg" alt="" />
@@ -186,7 +380,7 @@
                 </select>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
         <br />
         <div class="dialog-footer">
@@ -334,11 +528,75 @@ export default {
 </script>
 <style scoped>
 .dialog-body {
-  display: flex;
   align-content: flex-start;
-  overflow: scroll;
 }
 
+/**
+// row
+ */
+.base {
+  display: flex;
+}
+
+.row1 {
+  display: flex;
+  margin-top: 20px;
+}
+.base-left {
+  width: 362px;
+}
+.row1 input {
+  margin: 0 10px 0 20px;
+}
+
+.row1 :first-child {
+  width: 142px;
+}
+
+.empId {
+  width: 132px;
+}
+
+.row1 :last-child {
+  width: 219px;
+}
+
+.row2 {
+  margin-top: 20px;
+}
+.base-right {
+  width: 382px;
+  margin: 20px 0 0 20px;
+}
+.right1,
+.right2 {
+  display: flex;
+  margin-bottom: 30px;
+}
+
+.deep-on {
+  width: 765px;
+}
+
+.deep-on :only-child {
+  width: 100%;
+}
+
+.deep-down {
+  width: 602px;
+  margin-top: 40px;
+}
+
+.deep-phone, .deep-bank {
+  display: flex;
+}
+
+.deep-bank {
+  margin-top: 40px;
+}
+
+
+/** */
 .warning {
   border: 1px solid red;
 }
@@ -420,7 +678,7 @@ export default {
 }
 
 .dialog-header p {
-  color: #2D2D2D;
+  color: #2d2d2d;
   margin-top: 2px;
   margin-bottom: 0px;
   font-size: 14px;
