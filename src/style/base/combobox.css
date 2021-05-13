@@ -60,7 +60,6 @@ select:hover {
     top: 100%;
     left: 0;
     right: 0;
-    z-index: 99;
 }
 
 /*hide the items when the select box is closed:*/

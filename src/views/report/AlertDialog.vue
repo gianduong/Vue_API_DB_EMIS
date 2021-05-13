@@ -1,49 +1,69 @@
 <template>
-  <div>
-    <div class="check" :class="{ hidden: !isShowCheck }">
-      <div class="menu">
-        <p class="warning">Xóa bản ghi</p>
-        <div class="btnClose" @click="CloseCheck(), btnCloseOnClick()">
-          <p>&#10540;</p>
-        </div>
+  <div class="check" :class="{ hidden: !show }">
+    <div class="model"></div>
+    <div class="menu">
+      <p class="warning">THÔNG BÁO</p>
+      <div class="btnClose" @click="CloseCheck()">
+        <p>&#10540;</p>
       </div>
-      <div class="check-title">
-        <div class="logo">
-          <img src="../../assets/img/pop-danger.jpg" alt="" />
-        </div>
-        <div>
-          <p class="atention">
-            Bạn có thực sự muốn xóa {{ isDataCheck }} không?
-          </p>
-        </div>
+    </div>
+    <div class="check-title">
+      <div class="logo">
+        <img src="../../assets/img/pop-danger.jpg" alt="" />
       </div>
+      <div>
+        <p class="atention">
+          {{ msg }}
+        </p>
+      </div>
+    </div>
 
-      <div class="dialog-footer">
-        <div class="btn-close" @click="CloseCheck(), btnCloseOnClick()">
-          Không
-        </div>
-        <button
-          id="btnSave"
-          class="btn-default"
-          @click="acceptDeleteFunction()"
-        >
-          Có
-        </button>
-      </div>
+    <div class="dialog-footer">
+      <button id="btnSave" class="btn-default" @click="CloseCheck()">
+        Đồng ý
+      </button>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: "AlertDialog",
+  props: {
+    show: { type: Boolean, default: false },
+    msg: String,
+  },
+  methods: {
+    CloseCheck() {
+      this.show = false;
+    },
+  },
+};
+</script>
+
 <style scoped>
+.dialog .model {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #000000;
+  opacity: 0.4;
+}
+
 .check {
   box-sizing: border-box;
   position: absolute;
   width: 400px;
   height: 170px;
-  top: 50px;
+  top: 0px;
+  left: 0;
   left: calc(50% - 300px);
   background-color: #ffffff;
   border-radius: 5px;
   border: 1px solid #eceef1;
+  z-index: 50;
 }
 .warning {
   margin: 24px;
@@ -151,53 +171,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  left: 20px;
+  right: 35%;
   z-index: 1;
   cursor: pointer;
-  width: 80px;
+  width: 100px;
   height: 40px;
 }
 
 .dialog-footer button {
   position: absolute;
   right: 24px;
-  background-color: #2CA01C;
+  background-color: #f55353;
   width: 100px;
 }
 </style>
-<script>
-import axios from "axios";
-export default {
-  props: {
-    isShowCheck: { type: Boolean, default: false },
-    isDataCheck: { type: String },
-    isIdDelete: { type: String, default: null },
-  },
-  methods: {
-    CloseCheck() {
-      this.isShowCheck = false;
-      this.$emit("resetDelete");
-    },
-    acceptDeleteFunction() {
-      this.$emit("resetDelete");
-      axios
-        .delete("https://localhost:44369/api/Employee/" + this.isIdDelete)
-        .then(() => {
-          // alert("Xóa thành công!");
-          this.isShowCheck = false;
-          this.btnCloseOnClick();
-        })
-        .catch(() => {
-          console.log("Không xóa được nhân viên!");
-          this.btnCloseOnClick();
-
-        });
-    },
-
-    btnCloseOnClick() {
-      this.$emit("hideDialogDelete");
-      this.$emit("resetDelete");
-    },
-  },
-};
-</script>

@@ -10,6 +10,7 @@
         {{ matchId(this.employee) }}
         <div class="dialog-header">
           <div class="dialog-title">THÔNG TIN NHÂN VIÊN</div>
+          <img src="../../assets/icon/hoi.png" alt="" class="imghoi" />
           <div class="dialog-close-button" @click="btnCloseOnClick()">
             &#x2715;
           </div>
@@ -29,9 +30,15 @@
                     type="text"
                     ref="empId"
                     style="width: 132px"
-                    v-model="employee.EmployeeCode"
+                    v-model="employee.employeeCode"
                     :class="{ warning: colorId }"
                   />
+                  <div
+                    class="checkEmpCode"
+                    v-bind:class="{ DisplayCode: !isNullCode }"
+                  >
+                    Gán mã tự động
+                  </div>
                 </div>
                 <div class="m-col">
                   <label style="margin-left: 10px"
@@ -44,9 +51,22 @@
                     v-model="employee.fullName"
                     :class="{ warning: colorName }"
                   />
+                  <div
+                    class="checkName"
+                    style="width: 159px"
+                    v-bind:class="{ DisplayName: !isNullName }"
+                  >
+                    {{ popAlert }}
+                  </div>
                 </div>
               </div>
               <div class="row2">
+                <div
+                  class="checkDe"
+                  v-bind:class="{ DisplayDe: !isNullDepartment }"
+                >
+                  Đơn vị không được bỏ trống
+                </div>
                 <label style="margin-left: 10px"
                   >Đơn vị (<a style="color: red">*</a>)</label
                 >
@@ -54,6 +74,7 @@
                   id="cbDepartment"
                   style="margin-left: 10px; margin-bottom: 13px"
                   v-model="employee.departmentId"
+                  :class="{ warning: colorDepartment }"
                 >
                   <option value="35e773ea-5d44-2dda-26a8-6d513e380bde">
                     Phòng nghiên cứu
@@ -74,11 +95,11 @@
 
                 <label style="margin-left: 10px">Chức danh</label>
                 <input
-                  id="txtEmployeeCode"
+                  id="txtpositionName"
                   type="text"
                   ref="empId"
                   style="margin-left: 10px; margin-bottom: 20px"
-                  v-model="employee.employeeCode"
+                  v-model="employee.positionName"
                   :class="{ warning: colorId }"
                 />
               </div>
@@ -105,9 +126,7 @@
               </div>
               <div class="right2">
                 <div class="m-col">
-                  <label
-                    >Số CMTND</label
-                  >
+                  <label>Số CMTND</label>
                   <input
                     style="width: 172px"
                     id="txtCMT"
@@ -155,7 +174,7 @@
                 <div class="m-col">
                   <label>Điện thoại di động</label>
                   <input
-                    style="width:180px"
+                    style="width: 180px"
                     id="txtPhone"
                     type="text"
                     v-model="employee.phoneNumber"
@@ -164,8 +183,8 @@
                 <div class="m-col">
                   <label>Điện thoại cố định</label>
                   <input
-                    style="width:180px"
-                    id="txtPhone"
+                    style="width: 180px"
+                    id="txtPhoneHome"
                     type="text"
                     v-model="employee.homePhone"
                   />
@@ -173,7 +192,7 @@
                 <div class="m-col">
                   <label>Email (<a style="color: red">*</a>)</label>
                   <input
-                    style="width:180px"
+                    style="width: 180px"
                     id="txtEmail"
                     type="email"
                     v-model="employee.email"
@@ -184,8 +203,8 @@
                 <div class="m-col">
                   <label>Tên ngân hàng</label>
                   <input
-                    style="width:180px"
-                    id="txtPhone"
+                    style="width: 180px"
+                    id="txtBankName"
                     type="text"
                     v-model="employee.bankName"
                   />
@@ -193,8 +212,8 @@
                 <div class="m-col">
                   <label>Tài khoản ngân hàng</label>
                   <input
-                    style="width:180px"
-                    id="txtPhone"
+                    style="width: 180px"
+                    id="txtAccount"
                     type="text"
                     v-model="employee.bankAccount"
                   />
@@ -202,8 +221,8 @@
                 <div class="m-col">
                   <label>Chi nhánh</label>
                   <input
-                    style="width:180px"
-                    id="txtEmail"
+                    style="width: 180px"
+                    id="txtLocation"
                     type="email"
                     v-model="employee.agency"
                   />
@@ -211,184 +230,44 @@
               </div>
             </div>
           </div>
-          <!-- <div class="img">
-            <br />
-            <br />
-            <img src="../../assets/img/default-avatar.jpg" alt="" />
-            <p>Vui lòng chọn ảnh có định dạng .jpg, .jpeg, .png, .gif</p>
-          </div>
-          <div class="form">
-            <p>A. THÔNG TIN CHUNG</p>
-            <div class="border-div"></div>
-            <div class="form1">
-              <div class="m-col">
-                <label>Mã nhân viên (<a style="color: red">*</a>)</label>
-                <input
-                  id="txtEmployeeCode"
-                  type="text"
-                  ref="empId"
-                  v-model="employee.EmployeeCode"
-                  :class="{ warning: colorId }"
-                />
-              </div>
-              <div class="m-col">
-                <label>Họ và tên (<a style="color: red">*</a>)</label>
-                <input
-                  id="txtFullName"
-                  type="text"
-                  v-model="employee.FullName"
-                  :class="{ warning: colorName }"
-                />
-              </div>
-            </div>
-            <br /><br />
-            <div class="form1">
-              <div class="m-col">
-                <label>Ngày sinh</label>
-                <input
-                  id="dtDateOfBirth"
-                  type="date"
-                  v-model="employee.DateOfBirth"
-                />
-              </div>
-              <div class="m-col">
-                <label>Giới tính</label>
-                <select id="cbGender" v-model="employee.Gender">
-                  <option value="1">Nam</option>
-                  <option value="0">Nữ</option>
-                  <option value="2">Không xác định</option>
-                </select>
-              </div>
-            </div>
-            <br /><br />
-            <div class="form1">
-              <div class="m-col">
-                <label>Số CMTND/ Căn cước (<a style="color: red">*</a>)</label>
-                <input
-                  id="txtCMT"
-                  type="text"
-                  v-model="employee.IdentityNumber"
-                  :class="{ warning: colorCMT }"
-                />
-              </div>
-              <div class="m-col">
-                <label>Ngày cấp</label>
-                <input
-                  id="dtDatecreate"
-                  type="date"
-                  v-model="employee.IdentityDate"
-                />
-              </div>
-            </div>
-            <br /><br />
-            <div class="form1">
-              <div class="m-col">
-                <label>Nơi cấp</label>
-                <input
-                  id="txtPlace"
-                  type="text"
-                  v-model="employee.IdentityPlace"
-                />
-              </div>
-            </div>
-            <br /><br />
-            <div class="form1">
-              <div class="m-col">
-                <label>Email (<a style="color: red">*</a>)</label>
-                <input
-                  id="txtEmail"
-                  type="email"
-                  v-model="employee.Email"
-                  :class="{ warning: colorEmail }"
-                />
-              </div>
-              <div class="m-col">
-                <label>Số điện thoại (<a style="color: red">*</a>)</label>
-                <input
-                  id="txtPhone"
-                  type="text"
-                  v-model="employee.PhoneNumber"
-                  :class="{ warning: colorPhone }"
-                />
-              </div>
-            </div>
-            <br /><br />
-            <p>B. THÔNG TIN CÔNG VIỆC</p>
-            <div class="border-div"></div>
-            <div class="form1">
-              <div class="m-col">
-                <label>Vị trí</label>
-                <select id="cbPosition" v-model="employee.PositionId">
-                  <option value="3700cc49-55b5-69ea-4929-a2925c0f334d">
-                    Giám đốc
-                  </option>
-                  <option value="148ed882-32b8-218e-9c20-39c2f00615e8">
-                    Nhân viên Marketting
-                  </option>
-                  <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">
-                    Thu ngân
-                  </option>
-                </select>
-              </div>
-              <div class="m-col">
-                <label>Phòng ban</label>
-                <select id="cbDepartment" v-model="employee.DepartmentId">
-                  <option value="469b3ece-744a-45d5-957d-e8c757976496">
-                    Phòng nhân sự
-                  </option>
-                  <option value="4e272fc4-7875-78d6-7d32-6a1673ffca7c">
-                    Phòng Công nghệ
-                  </option>
-                  <option value="17120d02-6ab5-3e43-18cb-66948daf6128">
-                    Phòng đào tạo
-                  </option>
-                  <option value="142cb08f-7c31-21fa-8e90-67245e8b283e">
-                    Phòng Marketting
-                  </option>
-                </select>
-              </div>
-            </div>
-            <br /><br />
-            <div class="form1">
-              <div class="m-col">
-                <label>Mã số thuế cá nhân</label>
-                <input
-                  id="txtPersonalTaxCode"
-                  type="text"
-                  v-model="employee.PersonalTaxCode"
-                />
-              </div>
-              <div class="m-col">
-                <label>Mức lương cơ bản</label>
-                <input id="txtSalary" type="text" v-model="employee.Salary" />
-              </div>
-            </div>
-            <br /><br />
-            <div class="form1">
-              <div class="m-col">
-                <label>Ngày gia nhập công ty</label>
-                <input
-                  id="dtDateOfBirth"
-                  type="date"
-                  v-model="employee.JoinDate"
-                />
-              </div>
-              <div class="m-col">
-                <label>Tình trạng công việc</label>
-                <select id="cbGender">
-                  <option value="1">Đang làm việc</option>
-                </select>
-              </div>
-            </div>
-          </div> -->
         </div>
         <br />
         <div class="dialog-footer">
-          <div class="btn-close" @click="btnCloseOnClick()">Hủy</div>
+          <div class="btn-close" @click="btnCloseOnClick()">Cất</div>
           <button id="btnSave" class="btn-default" @click="btnSaveOnClick()">
-            Lưu
+            Cất và đóng
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- Alert check /////////////////////////////////////////////////////////////////////////////////////////-->
+    <div class="check1" :class="{ hidden1: !showAlert }">
+      <div class="menu1">
+        <p class="warning1">THÔNG BÁO</p>
+        <div class="btnClose1" @click="CloseCheck()">
+          <p>&#10540;</p>
+        </div>
+      </div>
+      <div class="check-title1">
+        <div class="logo1">
+          <img src="../../assets/img/pop-danger.jpg" alt="" />
+        </div>
+        <div>
+          <p class="atention1">
+            {{ contentMsg }}
+          </p>
+        </div>
+      </div>
+      <hr class="hrCheck" />
+      <div class="dialog-footer1">
+        <button
+          id="btnSave1"
+          class="btn-default1 btn-default"
+          @click="CloseCheck()"
+        >
+          Đồng ý
+        </button>
       </div>
     </div>
   </div>
@@ -401,69 +280,78 @@ export default {
     isShow: { type: Boolean, default: false },
     employee: { type: Object, default: null },
     formMode: { type: String, default: "add" },
-    colorId: { type: Boolean, default: false },
-    colorName: { type: Boolean, default: false },
-    colorCMT: { type: Boolean, default: false },
-    colorPhone: { type: Boolean, default: false },
-    colorEmail: { type: Boolean, default: false },
+
     salary: { type: String, default: "" },
   },
+
+  data() {
+    return {
+      showAlert: false,
+      contentMsg: "",
+      ErrorApi: false,
+      popAlert: "",
+      isNullName: false,
+      isNullCode: false,
+      isNullDepartment: false,
+      colorId: false,
+      colorName: false,
+      colorDepartment: false,
+    };
+  },
+
   methods: {
     /**--------------------------------------
      * Gọi đến phương thức ẩn Dialog của cha
      * CreatedBy: NVMANH (31/03/2021)
      */
     btnCloseOnClick() {
-      this.resetRedColor();
       this.$emit("hideDialog");
+      ((this.isNullCode == this.isNullDepartment) == this.isNullName) == false;
     },
 
     //ham gep id cho add employee
     matchId(employee) {
       if (this.idNewEmp != "" && this.formMode == "add") {
-        employee.EmployeeCode = this.idNewEmp;
+        employee.employeeCode = this.idNewEmp;
       }
     },
 
-    check() {
-      if (this.employee.EmployeeCode == "") {
-        this.colorId = true;
-      }
-      if (this.employee.FullName == "") {
+    CloseCheck() {
+      this.showAlert = false;
+    },
+
+    checkNameNull() {
+      if (this.employee.fullName == null || this.employee.fullName == "") {
+        this.popAlert = "Tên không được phép để trống";
         this.colorName = true;
-      }
-      if (this.employee.Email == "") {
-        this.colorEmail = true;
-      }
-      if (this.employee.PhoneNumber == "") {
-        this.colorPhone = true;
-      }
-      if (this.employee.IdentityNumber == "") {
-        this.colorCMT = true;
-      }
-    },
-
-    checkBeforeSave() {
-      if (this.employee.EmployeeCode != "") {
-        this.colorId = false;
-      }
-      if (this.employee.FullName != "") {
+        this.isNullName = true;
+      } else {
+        this.isNullName = false;
         this.colorName = false;
       }
-      if (this.employee.Email != "") {
-        this.colorEmail = false;
-      }
-      if (this.employee.PhoneNumber != "") {
-        this.colorPhone = false;
-      }
-      if (this.employee.IdentityNumber != "") {
-        this.colorCMT = false;
+    },
+
+    checkEmpCode() {
+      if (this.employee.employeeCode == "") {
+        this.colorId = true;
+        this.isNullCode = true;
+      } else {
+        this.isNullCode = false;
+        this.colorId = false;
       }
     },
 
-    formatPrice(value) {
-      let val = (value / 1).toFixed(0).replace(".", ",");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " (VND)";
+    checkDe() {
+      if (
+        this.employee.departmentId == null ||
+        this.employee.departmentId == ""
+      ) {
+        this.isNullDepartment = true;
+        this.colorDepartment = true;
+      } else {
+        this.isNullDepartment = false;
+        this.colorDepartment = false;
+      }
     },
 
     isEmailAddress(email) {
@@ -471,29 +359,41 @@ export default {
       return re.test(email);
     },
 
-    resetRedColor() {
-      this.colorId = this.colorName = this.colorCMT = this.colorEmail = this.colorPhone = false;
+    checkCodeExists(value) {
+      axios
+        .get(
+          "https://localhost:44369/api/Employee/CheckCodeExists?code=" + value
+        )
+        .then((res) => {
+          console.log(res);
+          this.ErrorApi = res.data;
+          if (this.ErrorApi == true) {
+            this.contentMsg =
+              "Mã nhân viên <" +
+              value +
+              "> đã tồn tại trong hệ thống, vui lòng kiểm tra lại!";
+            this.showAlert = true;
+          }
+        })
+        .catch((res) => {
+          console.log(res);
+        });
     },
 
     btnSaveOnClick() {
+      if (this.formMode == "add") {
+        this.checkCodeExists(this.employee.employeeCode);
+      }
+      this.checkEmpCode();
+      this.checkDe();
+      this.checkNameNull();
       if (
-        this.employee.EmployeeCode == "" ||
-        this.employee.FullName == "" ||
-        this.employee.PhoneNumber == "" ||
-        this.employee.Email == "" ||
-        this.employee.IdentityNumber == "" ||
-        this.isEmailAddress(this.employee.Email) == false
+        ((this.isNullCode == this.isNullDepartment) == this.isNullName) ==
+        false
       ) {
-        alert("vui lòng nhập đầy đủ thông tin hoặc nhập đúng dạng Email!");
-        this.check();
-      } else {
-        this.resetRedColor();
-        if (this.employee.Salary == this.formatPrice(this.salary)) {
-          this.employee.Salary = this.salary;
-        }
         if (this.formMode == "add") {
           axios
-            .post("http://api.manhnv.net/v1/Employees", this.employee)
+            .post("https://localhost:44369/api/Employee", this.employee)
             .then((res) => {
               console.log(res);
               this.$emit("hideDialog");
@@ -504,7 +404,8 @@ export default {
         } else {
           axios
             .put(
-              "http://api.manhnv.net/v1/Employees/" + this.employee.EmployeeId,
+              "https://localhost:44369/api/Employee/" +
+                this.employee.employeeId,
               this.employee
             )
             .then((res) => {
@@ -518,12 +419,6 @@ export default {
       }
     },
   },
-  filters: {
-    doiCachHienThi: function (value) {
-      let val = (value / 1).toFixed(0).replace(".", ",");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VND";
-    },
-  },
 };
 </script>
 <style scoped>
@@ -532,7 +427,7 @@ export default {
 }
 
 /**
-// row
+// row/////////////////////////////////////////////////////////////////////////////////////////
  */
 .base {
   display: flex;
@@ -562,8 +457,54 @@ export default {
 }
 
 .row2 {
-  margin-top: 20px;
+  margin-top: 30px;
 }
+
+/**validate /////////////////////////////////////////////////////////////////////*/
+
+.checkName {
+  z-index: 1;
+  background-color: #2c2b30;
+  color: #e4e4e4;
+  font-size: 11px;
+  position: absolute;
+  top: 127px;
+  left: 176px;
+}
+
+.checkEmpCode {
+  z-index: 1;
+  background-color: #2c2b30;
+  color: #e4e4e4;
+  font-size: 11px;
+  position: absolute;
+  top: 127px;
+  left: 34px;
+  width: 100px;
+}
+
+.checkDe {
+  z-index: 1;
+  background-color: #2c2b30;
+  color: #e4e4e4;
+  font-size: 11px;
+  position: absolute;
+  top: 194px;
+  left: 33px;
+}
+
+.DisplayCode {
+  display: none;
+}
+
+.DisplayName {
+  display: none;
+}
+
+.DisplayDe {
+  display: none;
+}
+
 .base-right {
   width: 382px;
   margin: 20px 0 0 20px;
@@ -587,14 +528,14 @@ export default {
   margin-top: 40px;
 }
 
-.deep-phone, .deep-bank {
+.deep-phone,
+.deep-bank {
   display: flex;
 }
 
 .deep-bank {
   margin-top: 40px;
 }
-
 
 /** */
 .warning {
@@ -649,7 +590,7 @@ export default {
 .btn-close {
   position: absolute;
   text-align: center;
-  right: 15%;
+  right: 22%;
   z-index: 1;
   cursor: pointer;
 }
@@ -682,5 +623,145 @@ export default {
   margin-top: 2px;
   margin-bottom: 0px;
   font-size: 14px;
+}
+
+.imghoi {
+  position: absolute;
+  top: 7px;
+  right: 5%;
+}
+
+/**alertDialog /////////////////////////////////////////////////////////////////////////*/
+.check1 {
+  box-sizing: border-box;
+  position: absolute;
+  width: 405px;
+  height: 185px;
+  top: 27px;
+  left: 0;
+  left: calc(50% - 300px);
+  background-color: #ffffff;
+  border-radius: 5px;
+  border: 1px solid #858585;
+  z-index: 2;
+}
+
+.warning1 {
+  margin: 10px 24px 24px 24px;
+}
+
+.btnClose1 {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btnClose1 p {
+  font-size: large;
+}
+
+.check-title1 {
+  display: flex;
+  width: 100%;
+  height: 100px;
+}
+
+.check-title1 .logo1 {
+  width: 40px;
+  height: 40px;
+  margin-left: 20px;
+  margin-top: 10px;
+  border: 1px solid #d8d6d6;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.check-title1 p {
+  margin-left: 10px;
+  margin-right: 24px;
+}
+
+.hidden1 {
+  display: none;
+}
+
+.check-title1 img {
+  width: 35px;
+  height: 35px;
+  margin-left: -2px;
+}
+
+.menu1 {
+  background-color: #ffffff;
+  height: 24px;
+}
+.atention1 {
+  /* text-align: center; */
+  font-size: 13.5px;
+}
+
+.dialog-close-button1:hover {
+  cursor: pointer;
+}
+
+.dialog-hide1 {
+  display: none;
+}
+
+.btn-close1:hover {
+  background-color: #f4f4f4;
+  border-radius: 5px;
+}
+
+.btnClose1:hover {
+  background-color: #f4f4f4;
+}
+
+.hrCheck {
+  border: 1px solid #2d2d2d;
+  margin-left: 20px;
+  margin-top: 0px;
+  position: absolute;
+  top: 112px;
+  z-index: 1;
+  width: 355px;
+}
+
+.dialog-footer1 {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  bottom: 0;
+  height: 56px;
+  background-color: #ffffff;
+  border-radius: 0 0 4px 4px;
+  left: 0;
+  right: 0;
+}
+
+.btn-close1 {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  right: 35%;
+  z-index: 1;
+  cursor: pointer;
+  width: 100px;
+  height: 40px;
+}
+
+.dialog-footer1 button {
+  position: absolute;
+  right: 24px;
+  margin-bottom: 10px;
+  background-color: #2ba01e;
+  width: 100px;
 }
 </style>

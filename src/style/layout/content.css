@@ -24,10 +24,10 @@
     z-index: 1 !important;
 }
 
-.btn-pagenumber.btn-pagenumber-selected, .btn-pagenumber-selected:hover {
+/* .btn-pagenumber.btn-pagenumber-selected, .btn-pagenumber-selected:hover {
     background-color: #019160;
     color: #ffffff;
-}
+} */
 
 .btn-pagenumber {
     width: 30px;

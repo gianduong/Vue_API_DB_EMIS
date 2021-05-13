@@ -20,21 +20,24 @@
         <select
           name="toolbar-action"
           class="toolbar-action"
-          v-model="this.department"
-          @click="loadWithDepartment(this.department)"
+          v-model="department"
+          @click="SearchByDepartmentId()"
         >
           <option value="">Thực hiện hàng loạt</option>
-          <option value="469b3ece-744a-45d5-957d-e8c757976496">
-            Phòng nhân sự
+          <option value="35e773ea-5d44-2dda-26a8-6d513e380bde">
+            Phòng nghiên cứu
           </option>
-          <option value="4e272fc4-7875-78d6-7d32-6a1673ffca7c">
+          <option value="3f8e6896-4c7d-15f5-a018-75d8bd200d7c">
             Phòng Công nghệ
           </option>
-          <option value="17120d02-6ab5-3e43-18cb-66948daf6128">
+          <option value="78aafe4a-67a7-2076-3bf3-eb0223d0a4f7">
             Phòng đào tạo
           </option>
-          <option value="142cb08f-7c31-21fa-8e90-67245e8b283e">
-            Phòng Marketting
+          <option value="45ac3d26-18f2-18a9-3031-644313fbb055">
+            Phòng kinh doanh
+          </option>
+          <option value="7c4f14d8-66fb-14ae-198f-6354f958f4c0">
+            Phòng kế toán
           </option>
         </select>
         <div class="tb-option">
@@ -45,7 +48,7 @@
             placeholder="Tìm theo mã, tên nhân viên"
           />
           <div class="mi mi-24 mi-refresh" @click="loadData()"></div>
-          <div class="mi mi-24 mi-excel__nav"></div>
+          <div class="mi mi-24 mi-excel__nav" @click="btnDeleteOnClick()"></div>
           <div class="mi mi-24 mi-setting__list"></div>
         </div>
         <!-- <button class="btn-refresh" @click="loadData()"></button>
@@ -68,15 +71,17 @@
               <th>SỐ TÀI KHOẢN</th>
               <th>TÊN NGÂN HÀNG</th>
               <th>CHI NHÁNH</th>
-              <!-- <th>CHỨC NĂNG</th> -->
+              <th>CHỨC NĂNG</th>
             </tr>
           </thead>
           <tbody>
             <tr
               v-for="emp in employees"
-              :key="emp.EmployeeId"
-              @dblclick="trOnDblClick(emp.EmployeeId)"
-              @click="getEmpID(emp.EmployeeId), (employeeName = emp.FullName)"
+              :key="emp.employeeId"
+              @dblclick="trOnDblClick(emp.employeeId)"
+              @click="
+                getEmpID(emp.employeeId), (employeeName = emp.employeeCode)
+              "
             >
               <td><input type="checkbox" /></td>
               <td>{{ emp.employeeCode }}</td>
@@ -85,11 +90,28 @@
               <td>{{ emp.dateOfBirth | formatDate }}</td>
               <td>{{ emp.identifyNumber }}</td>
               <td>{{ emp.positionName }}</td>
-              <td>Phòng kinh doanh</td>
+              <td>{{ emp.departmentId | fomatDepartment }}</td>
               <td>{{ emp.bankAccount }}</td>
               <td>{{ emp.bankName }}</td>
               <td>{{ emp.agency }}</td>
-              <!-- <td>Đang thử việc</td> -->
+              <td>
+                <div class="db-option">
+                  <div class="tbl-update" @click="trOnDblClick(emp.employeeId)">
+                    Sửa
+                  </div>
+                  <select
+                    name=""
+                    id=""
+                    class="tbl-option"
+                    v-model="deleteCheck"
+                    v-on="btnDeleteOnClick()"
+                  >
+                    <option value="1">Nhân bản</option>
+                    <option value="2" style="color: green">Xóa</option>
+                    <option value="3">Ngừng sử dụng</option>
+                  </select>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -98,64 +120,105 @@
     <div class="paging">
       <div data-v-a72348a4="" class="paging-bar">
         <div data-v-a72348a4="" class="paging-record-info">
-          Tổng số: <b data-v-a72348a4="">1000</b> bản ghi
+          Nhân viên: <b data-v-a72348a4="">{{ employees.length*(PageIndex -1) }} - {{ employees.length*PageIndex }}/{{maxEmp}}</b> bản ghi
         </div>
-        <div data-v-a72348a4="" class="paging-option">
+        <div data-v-a72348a4="" class="paging-option" style="margin-top: 15px">
           <!-- <div data-v-a72348a4="" class="btn-select-page m-btn-firstpage"></div>
           <div data-v-a72348a4="" class="btn-select-page m-btn-prev-page"></div> -->
           <div data-v-a72348a4="" class="m-btn-list-page">
-            <button data-v-a72348a4="" class="btn-pagenumber non-color">
+            <button data-v-a72348a4="" class="btn-pagenumber non-color" @click="(PageIndex = 1), indexCount = 5, paging()">
               &laquo;
             </button>
-            <button data-v-a72348a4="" class="btn-pagenumber non-color">
+            <button
+              data-v-a72348a4=""
+              class="btn-pagenumber non-color"
+              @click="downCountPage(), paging()"
+            >
               ❮
             </button>
             <button
               data-v-a72348a4=""
               class="btn-pagenumber btn-pagenumber-selected"
+              @click="(PageIndex = 1), paging()"
             >
               1</button
-            ><button data-v-a72348a4="" class="btn-pagenumber">2</button
-            ><button data-v-a72348a4="" class="btn-pagenumber">3</button
-            ><button data-v-a72348a4="" class="btn-pagenumber">4</button>
-            <button data-v-a72348a4="" class="btn-pagenumber non-color">
+            ><button
+              data-v-a72348a4=""
+              class="btn-pagenumber"
+              @click="(PageIndex = 2), paging()"
+            >
+              2</button
+            ><button
+              data-v-a72348a4=""
+              class="btn-pagenumber"
+              @click="(PageIndex = 3), paging()"
+              :class="{hiddencheck: checkcheck3}"
+            >
+              3</button
+            ><button
+              data-v-a72348a4=""
+              class="btn-pagenumber"
+              @click="(PageIndex = 4), paging()"
+              :class="{hiddencheck: checkcheck4}"
+            >
+              4
+            </button>
+            <button
+            style="border:none"
+            :class="{hiddencheck: checkcheckn}"
+            >...</button>
+
+            <button
+              data-v-a72348a4=""
+              class="btn-pagenumber"
+              @click="(PageIndex = indexCount), paging()"
+              :class="{hiddencheck: checkcheckn}"
+            >
+              {{indexCount}}
+            </button>
+            <button
+            style="border:none"
+            :class="{hiddencheck: checkcheckn}"
+            >...</button>
+
+            <button
+              data-v-a72348a4=""
+              class="btn-pagenumber"
+              @click="(PageIndex = maxIndexCount), paging()"
+              :class="{hiddencheck: checkcheckn}"
+            >
+              {{maxIndexCount}}
+            </button>
+            <button
+              data-v-a72348a4=""
+              class="btn-pagenumber non-color"
+              @click="(PageIndex += 1), upCountPage(), paging()"
+              :class="{hiddencheck: checkcheckn}"
+            >
               ❯
             </button>
-            <button data-v-a72348a4="" class="btn-pagenumber non-color">
+            <button data-v-a72348a4="" class="btn-pagenumber non-color" @click="(PageIndex = maxIndexCount), paging()">
               &raquo;
             </button>
           </div>
           <!-- <div data-v-a72348a4="" class="btn-select-page m-btn-next-page"></div>
           <div data-v-a72348a4="" class="btn-select-page m-btn-lastpage"></div> -->
-          <!-- <paginate
-            v-model="page"
-            :page-count="20"
-            :page-range="3"
-            :margin-pages="2"
-            :click-handler="clickCallback"
-            :prev-text="'Prev'"
-            :next-text="'Next'"
-            :container-class="'pagination'"
-            :page-class="'page-item'"
-          >
-          </paginate> -->
+          <!-- <jw-pagination
+            :items="exampleItems"
+            @changePage="onChangePage"
+          ></jw-pagination> -->
         </div>
         <div data-v-a72348a4="" class="paging-record-option">
-          <select class="select-banGhi">
-            <option value=""
-            >10 bản ghi trên một trang</option>
-            <option value="1">
-              20 bản ghi trên một trang
-            </option>
-            <option value="2">
-              30 bản ghi trên một trang
-            </option>
-            <option value="3">
-              50 bản ghi trên một trang
-            </option>
-            <option value="4">
-              100 bản ghi trên một trang
-            </option>
+          <select
+            class="select-banGhi"
+            v-model="selectedPaging"
+            @click="selectPaging()"
+          >
+            <option value="0">10 bản ghi trên một trang</option>
+            <option value="1">20 bản ghi trên một trang</option>
+            <option value="2">30 bản ghi trên một trang</option>
+            <option value="3">50 bản ghi trên một trang</option>
+            <option value="4">100 bản ghi trên một trang</option>
           </select>
         </div>
       </div>
@@ -165,11 +228,6 @@
       :employee="selectedEmployee"
       :formMode="dialogFormMode"
       @hideDialog="hideDialog"
-      :colorCMT="colorCMT"
-      :colorId="colorId"
-      :colorName="colorName"
-      :colorEmail="colorEmail"
-      :colorPhone="colorPhone"
       :salary="salary"
       :idNewEmp="idNewEmp"
     />
@@ -178,14 +236,20 @@
       :isIdDelete="idDelete"
       :isDataCheck="employeeName"
       @hideDialogDelete="hideDialogDelete"
+      @resetDelete="resetDelete"
     />
   </div>
 </template>
 <script>
+// const exampleItems = [...Array(150).keys()].map((i) => ({
+//   id: i + 1,
+//   name: "Item " + (i + 1),
+// }));
 // var idcustomer;
 import CustomerDetail from "./EmployeeDetail.vue";
 import checkDelete from "../report/check.vue";
-// import Paginate from 'vuejs-paginate'
+// import Paginate from "vuejs-paginate";
+// import JwPagination from "jw-vue-pagination";
 import axios from "axios";
 import moment from "moment";
 export default {
@@ -193,6 +257,7 @@ export default {
     CustomerDetail,
     checkDelete,
     // Paginate,
+    // JwPagination,
   },
 
   created() {
@@ -202,6 +267,7 @@ export default {
       .then((res) => {
         console.log(res);
         this.employees = res.data;
+        this.maxEmp = this.employees.length;
       })
       .catch((res) => {
         console.log(res);
@@ -209,9 +275,16 @@ export default {
   },
   props: {
     changeColor: { type: Boolean, default: false },
+    checkcheck3: {type: Boolean, default: false},
+    checkcheck4: {type: Boolean, default: false},
+    checkcheckn: {type: Boolean, default: true},
   },
 
   methods: {
+    onChangePage(pageOfItems) {
+      // update page of items
+      this.pageOfItems = pageOfItems;
+    },
     loadData() {
       axios
         .get("https://localhost:44369/api/Employee")
@@ -224,9 +297,57 @@ export default {
         });
     },
 
-    paging(PageIndex, PageSize) {
+    upCountPage(){
+      if(this.indexCount >= 5 && this.indexCount < this.maxIndexCount - 1){
+        this.indexCount += 1; 
+      }
+    },
+
+    downCountPage(){
+      if(this.indexCount > 5){
+        this.indexCount -= 1; 
+      }
+      if(this.PageIndex > 1){
+        this.PageIndex -= 1;
+      }
+    },
+
+    selectPaging() {
+      this.indexCount = 5;
+      if (this.selectedPaging == "0") {
+        this.PageSize = 10;
+        this.maxIndexCount = Math.floor(this.maxEmp/this.PageSize);
+        this.checkcheckn = false;
+        this.checkcheck3 = this.checkcheck4 = false;
+      } else if (this.selectedPaging == "1") {
+        this.maxIndexCount = Math.floor(this.maxEmp/this.PageSize);
+        this.PageSize = 20;
+        this.checkcheckn = false;
+        this.checkcheck3 = this.checkcheck4 = false;
+      } else if (this.selectedPaging == "2") {
+        this.maxIndexCount = Math.floor(this.maxEmp/this.PageSize);
+        this.PageSize = 30;
+        this.checkcheckn = false;
+        this.checkcheck3 = this.checkcheck4 = false;
+      } else if (this.selectedPaging == "3") {
+        this.PageSize = 50;
+        this.checkcheckn = true;
+        this.checkcheck3 = this.checkcheck4 = false;
+      } else {
+        this.PageSize = 100;
+        this.checkcheckn = true;
+        this.checkcheck3 = this.checkcheck4 = true;
+      }
+    },
+
+    paging() {
       axios
-        .get("https://localhost:44369/api/Employee/Paging?pageIndex="+ this.PageIndex + "&pageSize=" + this.PageSize)
+        .get(
+          "https://localhost:44369/api/Employee/Paging?pageIndex=" +
+            this.PageIndex +
+            "&pageSize=" +
+            this.PageSize
+        )
         .then((res) => {
           console.log(res);
           this.employees = res.data;
@@ -241,7 +362,6 @@ export default {
      */
     btnAddOnClick() {
       this.getIdlast();
-      this.colorName = this.colorCMT = this.colorEmail = this.colorPhone = true;
       this.selectedEmployee = {};
       this.isShowDialogDetail = true;
       this.dialogFormMode = "add";
@@ -252,7 +372,6 @@ export default {
      */
     hideDialog() {
       this.isShowDialogDetail = false;
-      this.colorId = this.colorName = this.colorCMT = this.colorEmail = this.colorPhone = false;
       this.idNewEmp = "";
       this.loadData();
     },
@@ -264,22 +383,18 @@ export default {
       this.loadData();
     },
 
-    formatPrice(value) {
-      let val = (value / 1).toFixed(0).replace(".", ",");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " (VND)";
-    },
+    // formatPrice(value) {
+    //   let val = (value / 1).toFixed(0).replace(".", ",");
+    //   return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " (VND)";
+    // },
 
     trOnDblClick(employeeID) {
       // Lấy id của bản ghi được chọn:
       // this.idNewEmp = "";
       axios
-        .get("https://localhost:44369/api/Employee" + employeeID)
+        .get("https://localhost:44369/api/Employee/" + employeeID)
         .then((res) => {
           this.selectedEmployee = res.data;
-          this.salary = this.selectedEmployee.Salary;
-          this.selectedEmployee.Salary = this.formatPrice(
-            this.selectedEmployee.Salary
-          );
           console.log(res);
         })
         .catch((res) => {
@@ -304,57 +419,24 @@ export default {
         });
     },
 
-    loadWithDepartment(department) {
-      alert(department);
-      // if (department == "") {
-      this.loadData();
-      // } else {
-      //   axios
-      //     .get(
-      //       "http://api.manhnv.net/v1/Employees/Filter?departmentId=" +
-      //         department
-      //     )
-      //     .then((res) => {
-      //       this.selectedEmployee = res.data;
-      //       console.log(res);
-      //     })
-      //     .catch((res) => {
-      //       console.log(res);
-      //     });
-      // }
-    },
-
-    loadWithPosition(position) {
-      alert(position);
-      // if (position == "") {
-      this.loadData();
-      // } else {
-      //   axios
-      //     .get(
-      //       "http://api.manhnv.net/v1/Employees/Filter?positionId=" + position
-      //     )
-      //     .then((res) => {
-      //       this.selectedEmployee = res.data;
-      //       console.log(res);
-      //     })
-      //     .catch((res) => {
-      //       console.log(res);
-      //     });
-      // }
-    },
-
     getEmpID(employeeID) {
       this.EmployeeId = employeeID;
       this.idDelete = employeeID;
     },
 
     btnDeleteOnClick() {
-      if (this.idDelete != "") {
-        this.isShowDialogDelete = true;
+      if (this.deleteCheck == "2") {
+        if (this.idDelete != "") {
+          this.isShowDialogDelete = true;
+        }
       }
     },
 
-  searchData() {
+    resetDelete() {
+      this.deleteCheck = 10;
+    },
+
+    searchData() {
       axios
         .get("https://localhost:44369/api/Employee/search?name=" + this.search)
         .then((res) => {
@@ -364,15 +446,34 @@ export default {
         .catch((res) => {
           console.log(res);
         });
-    },    
+    },
+
+    SearchByDepartmentId() {
+      if (this.department != "" && this.department != null) {
+        axios
+          .get(
+            "https://localhost:44369/api/Employee/searchByDepartmentId?name=" +
+              this.department
+          )
+          .then((res) => {
+            console.log(res);
+            this.employees = res.data;
+          })
+          .catch((res) => {
+            console.log(res);
+          });
+      } else {
+        this.loadData();
+      }
+    },
   },
 
   watch: {
-    search: function(value) {
-      if(value != "") {
+    search: function (value) {
+      if (value != "") {
         this.searchData();
       }
-    } 
+    },
   },
 
   data() {
@@ -389,22 +490,20 @@ export default {
       employees: [],
       department: "",
       position: "",
-      colorId: false,
-      colorName: false,
-      colorCMT: false,
-      colorPhone: false,
-      colorEmail: false,
       salary: "",
       idNewEmp: "",
       search: "",
-      PageIndex: 10,
+      PageIndex: 1,
       PageSize: 10,
+      selectedPaging: "",
+      // exampleItems,
+      // pageOfItems: [],
+      deleteCheck: 10,
+      indexCount: 5,
+      maxIndexCount: 0,
+      maxEmp:0,
     };
   },
-
-  
-
-
 
   filters: {
     doiCachHienThi(value) {
@@ -417,14 +516,25 @@ export default {
       }
     },
     fomatGender(value) {
-      if(value == 0) {
-        return "Không xác định"
+      if (value == 0) {
+        return "Khác";
+      } else if (value == 1) {
+        return "Nam";
+      } else {
+        return "Nữ";
       }
-      else if(value == 1){
-        return "Nữ"
-      }
-      else{
-        return "Nam"
+    },
+    fomatDepartment(value) {
+      if (value == "78aafe4a-67a7-2076-3bf3-eb0223d0a4f7") {
+        return "Phòng đào tạo";
+      } else if (value == "45ac3d26-18f2-18a9-3031-644313fbb055") {
+        return "Phòng kinh doanh";
+      } else if (value == "7c4f14d8-66fb-14ae-198f-6354f958f4c0") {
+        return "Phòng kế toán";
+      } else if (value == "3f8e6896-4c7d-15f5-a018-75d8bd200d7c") {
+        return "Phòng công nghệ";
+      } else {
+        return "Phòng nghiên cứu";
       }
     },
   },
@@ -441,12 +551,51 @@ export default {
 ::-webkit-scrollbar {
   width: 0px;
 }
+/**Paginate */
+.paginateOne {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  list-style-type: none;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.paginateOne .pagiItem {
+  margin: 0 5px 0 5px;
+}
+
+.hiddencheck{
+  display: none;
+}
+
+/**
+/// chuc nang
+ */
+.db-option {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tbl-update {
+  font-size: 13px;
+  margin-right: 10px;
+  color: #0071b8;
+}
+
+.tbl-option {
+  width: 0px;
+  height: 20px;
+  padding-left: 2px;
+  margin-top: 0;
+}
 
 .table-employee {
   background-color: #ffffff;
   position: relative;
-  width: 1140px;
-  height: 500px;
+  width: 1295px;
+  height: 580px;
   max-height: 700px;
   top: 0;
   left: 0;
@@ -576,7 +725,6 @@ select {
 }
 
 .status {
-  z-index: 1;
   display: flex;
   width: 90px;
   height: 40px;
@@ -680,4 +828,7 @@ lua chon tren tb
   padding-left: 5px;
   font-size: 13px !important;
 }
+
+
+
 </style>

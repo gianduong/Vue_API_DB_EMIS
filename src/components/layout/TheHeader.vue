@@ -5,7 +5,7 @@
             <div class="local-box">
                 <form action="">
                     <label for="location"></label>
-                    <select name="location" id="">
+                    <select name="location" id="" style="width: 216px;">
                         <option value="volvo">CÔNG TY CỔ PHẦN MISA</option>
                     </select>
                 </form>
@@ -127,7 +127,7 @@ select:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 10px 0 0 200px;
+    margin: 10px 0 0 300px;
     box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -163,7 +163,9 @@ select:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 5px 0 0 10px;
+    margin: 5px 0 0 0px;
+    position: absolute;
+    right: 18%;
 }
 
 .mi {

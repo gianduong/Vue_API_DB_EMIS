@@ -9,59 +9,59 @@
         <div class="navbar-text">Tổng quan</div>
       </a>
       <router-link class="navbar-item" to="/employee">
-        <div class="navbar-icon icon-dashboard"></div>
+        <div class="navbar-icon icon-tienmat"></div>
         <div class="navbar-text">Tiền mặt</div>
       </router-link>
       <router-link class="navbar-item" to="/employee">
-        <div class="navbar-icon icon-dashboard"></div>
+        <div class="navbar-icon icon-tiengui"></div>
         <div class="navbar-text">Tiền gửi</div>
       </router-link>
       <router-link class="navbar-item" to="/report">
-        <div class="navbar-icon icon-dashboard"></div>
+        <div class="navbar-icon icon-muahang"></div>
         <div class="navbar-text">Mua hàng</div>
       </router-link>
       <router-link class="navbar-item" to="/report">
-        <div class="navbar-icon icon-dashboard"></div>
+        <div class="navbar-icon icon-banhang"></div>
         <div class="navbar-text">Bán hàng</div>
       </router-link>
       <router-link class="navbar-item" to="/report">
-        <div class="navbar-icon icon-dashboard"></div>
+        <div class="navbar-icon icon-hoadon"></div>
         <div class="navbar-text">Quản lý hóa đơn</div>
       </router-link>
       <router-link class="navbar-item" to="/report">
-        <div class="navbar-icon icon-dashboard"></div>
+        <div class="navbar-icon icon-kho"></div>
         <div class="navbar-text">Kho</div>
       </router-link>
       <router-link class="navbar-item" to="/report">
-        <div class="navbar-icon icon-dashboard"></div>
+        <div class="navbar-icon icon-congcu"></div>
         <div class="navbar-text">Công cụ dụng cụ</div>
       </router-link>
       <router-link class="navbar-item" to="/report">
-        <div class="navbar-icon icon-dashboard"></div>
+        <div class="navbar-icon icon-taisan"></div>
         <div class="navbar-text">Tài sản cố định</div>
       </router-link>
       <router-link class="navbar-item" to="/report">
-        <div class="navbar-icon icon-dashboard"></div>
+        <div class="navbar-icon icon-thue"></div>
         <div class="navbar-text">Thuế</div>
       </router-link>
       <router-link class="navbar-item" to="/report">
-        <div class="navbar-icon icon-dashboard"></div>
+        <div class="navbar-icon icon-giathanh"></div>
         <div class="navbar-text">Giá thành</div>
       </router-link>
       <router-link class="navbar-item" to="/report">
-        <div class="navbar-icon icon-dashboard"></div>
+        <div class="navbar-icon icon-tonghop"></div>
         <div class="navbar-text">Tổng hợp</div>
       </router-link>
       <router-link class="navbar-item" to="/report">
-        <div class="navbar-icon icon-dashboard"></div>
+        <div class="navbar-icon icon-ngansach"></div>
         <div class="navbar-text">Ngân sách</div>
       </router-link>
       <router-link class="navbar-item" to="/report">
-        <div class="navbar-icon icon-dashboard"></div>
+        <div class="navbar-icon icon-baocao"></div>
         <div class="navbar-text">Báo cáo</div>
       </router-link>
       <router-link class="navbar-item" to="/report">
-        <div class="navbar-icon icon-dashboard"></div>
+        <div class="navbar-icon icon-taichinh"></div>
         <div class="navbar-text">Phân tích tài chính</div>
       </router-link>
     </div>
@@ -73,6 +73,24 @@
   height: 100vh;
   border-right: 1px solid #dedede;
   background-color: #393A3E;
+}
+/**logo */
+.mi-sidebar-dashboard {
+    background-position: -30px -1628px;
+}
+.mi-24 {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+}
+.mi {
+    background: url("../../assets/img/Sprites.64af8f61.svg") no-repeat;
+    cursor: pointer;
+}
+
+.mi-sidebar-dashboard[data-v-31c3492c] {
+    background-position: -30px -1628px;
 }
 
 .logo-box {
